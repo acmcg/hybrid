@@ -1,9 +1,18 @@
 FROM alpine
-
+LABEL maintainer="andrew.mcgregor@hpe.com"
 ENV AUTHOR=Docker
 
-WORKDIR /usr/share/terraform
+WORKDIR /tmp
 
-COPY Hello_docker.html /usr/share/nginx/html
+# Download terraform binary
+RUN wget https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
+RUN unzip terraform_0.11.10_linux_amd64.zip -d /usr/bin
+RUN rm terraform_0.11.10_linux_amd64.zip
 
-CMD cd /usr/share/nginx/html && sed -e s/Docker/"$AUTHOR"/ Hello_docker.html > index.html ; nginx -g 'daemon off;'
+RUN \
+
+  apk update && \
+  apk add bash py-pip && \
+  apk add --virtual=build gcc libffi-dev musl-dev openssl-dev python-dev make && \
+  pip install azure-cli && \
+  apk del --purge build 

@@ -1,4 +1,4 @@
-# Sample Dockerfile
+# Can be executed as docker build https://github.com/acmcg/hybrid.git -t terraform:latest
 
 # Indicates that the windowsservercore image will be used as the base image.
 FROM microsoft/windowsservercore
@@ -12,8 +12,12 @@ RUN powershell.exe -Command invoke-command -ScriptBlock { \
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 ; \
 invoke-webrequest https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_windows_amd64.zip -OutFile terraform.zip ;\
 expand-archive terraform.zip -DestinationPath c:\terraform -Force;\
-Remove-Item -Force terraform.zip
+Remove-Item -Force terraform.zip \
 }
 
 # Sets a command or process that will run each time a container is run from the new image.
 CMD [ "SET PATH=%PATH%;c:\\terraform" ]
+
+COPY Networking.tf c:/terraform
+
+WORKDIR c:\\terraform
