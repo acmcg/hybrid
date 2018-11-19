@@ -11,8 +11,9 @@ LABEL maintainer="andrew.mcgregor@hpe.com"
 RUN powershell.exe -Command invoke-command -ScriptBlock { \
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 ; \
 invoke-webrequest https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_windows_amd64.zip -OutFile terraform.zip ;\
-expand-archive terraform.zip -DestinationPath c:\terraform -Force\
+expand-archive terraform.zip -DestinationPath c:\terraform -Force;\
+Remove-Item -Force terraform.zip
 }
 
 # Sets a command or process that will run each time a container is run from the new image.
-CMD [ "SET PATH=%PATH%;c:\terraform" ]
+CMD [ "SET PATH=%PATH%;c:\\terraform" ]
