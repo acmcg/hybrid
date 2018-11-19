@@ -2,17 +2,23 @@ FROM alpine
 LABEL maintainer="andrew.mcgregor@hpe.com"
 ENV AUTHOR=Docker
 
-WORKDIR /tmp
+
 
 # Download terraform binary
 RUN wget https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
 RUN unzip terraform_0.11.10_linux_amd64.zip -d /usr/bin
 RUN rm terraform_0.11.10_linux_amd64.zip
+RUN makedir /terraform
 
 RUN \
 
   apk update && \
   apk add bash py-pip && \
   apk add --virtual=build gcc libffi-dev musl-dev openssl-dev python-dev make && \
+  pip install --upgrade pip && \
   pip install azure-cli && \
   apk del --purge build 
+
+COPY Networking.tf c:/terraform
+
+WORKDIR /terraform
