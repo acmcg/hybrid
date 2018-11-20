@@ -14,15 +14,16 @@ invoke-webrequest https://releases.hashicorp.com/terraform/0.11.10/terraform_0.1
 expand-archive terraform.zip -DestinationPath c:\terraform -Force;\
 Remove-Item -Force terraform.zip \
 }
+#initialize terraform directory
+COPY Networking.tf c:/terraform
 RUN cd c:\terraform && terraform init
 
+#Install Azure CLI
 RUN powershell.exe -Command invoke-command -ScriptBlock { \
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 ; \
 invoke-webrequest https://aka.ms/installazurecliwindows -OutFile azurecli.msi ; \
 }
-
 RUN msiexec /i "azurecli.msi" /qn
 
-COPY Networking.tf c:/terraform
-
+#Set working directory
 WORKDIR c:\\terraform
