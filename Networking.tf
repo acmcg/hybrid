@@ -1,3 +1,7 @@
+
+# Configure the Azure Provider
+provider "azurerm" {}
+
 resource "azurerm_resource_group" "test" {
   name     = "acceptanceTestResourceGroup1"
   location = "West US"

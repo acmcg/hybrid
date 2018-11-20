@@ -14,6 +14,7 @@ invoke-webrequest https://releases.hashicorp.com/terraform/0.11.10/terraform_0.1
 expand-archive terraform.zip -DestinationPath c:\terraform -Force;\
 Remove-Item -Force terraform.zip \
 }
+RUN cd c:\terraform && terraform init
 
 RUN powershell.exe -Command invoke-command -ScriptBlock { \
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 ; \
