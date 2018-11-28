@@ -1,0 +1,49 @@
+
+{
+  "variables": {
+    "client_id": "{{env `ARM_CLIENT_ID`}}",
+    "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
+    "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}"
+  },
+  "builders": [{
+    "type": "azure-arm",
+
+    "client_id": "{{user `client_id`}}",
+    "client_secret": "{{user `client_secret`}}",
+    "subscription_id": "{{user `subscription_id`}}",
+
+    "os_type": "Linux",
+    "image_publisher": "Canonical",
+    "image_offer": "UbuntuServer",
+    "image_sku": "16.04-LTS",
+
+    "managed_image_resource_group_name": "packertest",
+    "managed_image_name": "MyUbuntuImage",
+
+    "azure_tags": {
+        "Environment": "Demo",
+        "task": "image deployment"
+    },
+
+    "location": "West US",
+    "vm_size": "Standard_DS2_v2"
+  }],
+  "provisioners": [{
+    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+    "inline": [
+      "AZ_REPO=$(lsb_release -cs)",
+      "echo \"deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main\" > /etc/apt/sources.list.d/azure-cli.list",
+      "sudo apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packages.microsoft.com --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF",
+      "apt-get update",
+      "apt-get upgrade -y",
+      "apt-get install unzip apt-transport-https lsb-release software-properties-common -y",
+      "wget https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip",
+      "unzip terraform_0.11.10_linux_amd64.zip -d /usr/bin",
+      "rm terraform_0.11.10_linux_amd64.zip",
+      "apt-get install azure-cli",
+      "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+    ],
+    "inline_shebang": "/bin/sh -x",
+    "type": "shell"
+  }]
+}
