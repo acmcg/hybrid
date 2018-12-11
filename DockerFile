@@ -15,7 +15,9 @@ expand-archive terraform.zip -DestinationPath c:\terraform -Force;\
 Remove-Item -Force terraform.zip \
 }
 #initialize terraform directory
-COPY Networking.tf c:/terraform
+COPY *.tf c:/terraform/
+COPY *.tfstate c:/terraform/
+COPY *.tfvars c:/terraform/
 RUN cd c:\terraform && terraform init
 
 #Install Azure CLI
