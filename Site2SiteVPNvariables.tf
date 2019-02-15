@@ -3,9 +3,9 @@
     variable "arm_endpoint" {
         default  = "https://management.equinix.vigilant.it"
     }
-    # make sure to use tenant subscription not admin
+    # make sure to use tenant subscription not admin - This is the Azure Stack Subscription ID
     variable "subscription_id" {
-         default = "d0153df1-d08e-45b5-ab6b-32c449194267"
+         default = "a5bd5d47-8056-47ed-be92-2f53401c709f"
     }
     # Client id is an app registration - with Application ID
     # Use tenant AD

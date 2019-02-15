@@ -26,4 +26,5 @@ override.tf.json
 # !example_override.tf
 
 #Ignore Packer Environment variables
-ubuntuPackerVariables.json
+ubuntuPackerAzVariables.json
+ubuntuPackerAzsVariables.json
